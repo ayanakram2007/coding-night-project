@@ -3,9 +3,1399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coding Night</title>
+    <title>SocialHub - Connect & Share</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #1c1e21;
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-50px); }
+            75% { transform: translateY(-100px) translateX(100px); }
+        }
+
+        /* Header/Navigation */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 0;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 2px solid #e4e6eb;
+            border-radius: 24px;
+            outline: none;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .search-bar input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #65676b;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #f0f2f5;
+            font-size: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-icon:hover {
+            background: #e4e6eb;
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff4458;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 20px;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto 12px;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e4e6eb;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #65676b;
+        }
+
+        .sidebar-menu {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            transform: translateX(4px);
+        }
+
+        .sidebar-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Main Feed */
+        .main-feed {
+            min-height: 100vh;
+        }
+
+        /* Stories Section */
+        .stories-section {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .stories-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .story {
+            min-width: 110px;
+            height: 180px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .story:hover {
+            transform: scale(1.05);
+        }
+
+        .story-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .story-name {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .add-story {
+            background: white;
+            border: 2px dashed #667eea;
+        }
+
+        .add-story-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Create Post */
+        .create-post {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .create-post-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .post-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e4e6eb;
+            background: #f8f9fa;
+            border-radius: 24px;
+            outline: none;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .post-input:focus {
+            border-color: #667eea;
+            background: white;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 16px;
+            border-top: 1px solid #e4e6eb;
+        }
+
+        .post-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #65676b;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .post-action-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .post-action-btn input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Post Card */
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 12px;
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-username {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .post-time {
+            font-size: 13px;
+            color: #65676b;
+        }
+
+        .post-menu {
+            color: #65676b;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .post-menu:hover {
+            background: #f0f2f5;
+        }
+
+        .post-dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 200px;
+            z-index: 100;
+        }
+
+        .post-dropdown.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f2f5;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .post-content {
+            padding: 0 16px 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .post-image:hover {
+            transform: scale(1.02);
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-top: 1px solid #e4e6eb;
+            border-bottom: 1px solid #e4e6eb;
+            font-size: 14px;
+            color: #65676b;
+        }
+
+        .post-interactions {
+            display: flex;
+            padding: 4px 16px;
+        }
+
+        .interaction-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #65676b;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .interaction-btn:hover {
+            background: #f0f2f5;
+            transform: scale(1.05);
+        }
+
+        .interaction-btn.liked {
+            color: #ff4458;
+            animation: likeAnimation 0.5s ease;
+        }
+
+        @keyframes likeAnimation {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .interaction-btn.commented {
+            color: #1877f2;
+        }
+
+        .interaction-btn.shared {
+            color: #31a24c;
+        }
+
+        .comments-section {
+            padding: 16px;
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+        }
+
+        .comment {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .comment-content {
+            flex: 1;
+            background: #f0f2f5;
+            padding: 10px 14px;
+            border-radius: 18px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+        }
+
+        .comment-input-wrapper {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #e4e6eb;
+            border-radius: 24px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .widget-title {
+            font-weight: 600;
+            margin-bottom: 16px;
+            font-size: 17px;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .friend-item:hover {
+            background: #f0f2f5;
+        }
+
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background: #31a24c;
+            border-radius: 50%;
+            border: 2px solid white;
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .trending-item {
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .trending-item:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        .trending-tag {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .trending-posts {
+            font-size: 12px;
+            color: #65676b;
+        }
+
+        .share-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 1001;
+            min-width: 400px;
+            animation: popIn 0.3s ease;
+        }
+
+        .share-popup.active {
+            display: block;
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .share-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .share-overlay.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e4e6eb;
+        }
+
+        .share-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .share-close {
+            font-size: 28px;
+            cursor: pointer;
+            color: #65676b;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .share-close:hover {
+            background: #f0f2f5;
+            transform: rotate(90deg);
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .share-option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-color: #667eea;
+            transform: translateY(-4px);
+        }
+
+        .share-icon {
+            font-size: 36px;
+        }
+
+        .share-label {
+            font-size: 13px;
+            color: #65676b;
+            font-weight: 600;
+        }
+
+        .share-count-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #31a24c;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .emoji-picker {
+            display: none;
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 100;
+            max-width: 300px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+
+        .emoji-picker.active {
+            display: grid;
+        }
+
+        .emoji-item {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .emoji-item:hover {
+            background: #f0f2f5;
+            transform: scale(1.2);
+        }
+
+        .post-image-preview {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .post-image-preview.active {
+            display: block;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 18px;
+            display: none;
+        }
+
+        .remove-image-btn.active {
+            display: block;
+        }
+
+        .image-preview-container {
+            position: relative;
+        }
+
+        .reaction-popup {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: white;
+            border-radius: 30px;
+            padding: 8px 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 8px;
+            z-index: 50;
+        }
+
+        .reaction-popup.active {
+            display: flex;
+            animation: popUp 0.3s ease;
+            gap: 4px;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.5) translateY(10px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .reaction-emoji {
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 4px;
+            border-radius: 50%;
+        }
+
+        .reaction-emoji:hover {
+            transform: scale(1.3);
+            background: #f0f2f5;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f0f2f5;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #65676b;
+            font-style: italic;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots span {
+            animation: blink 1.4s infinite;
+            opacity: 0;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .delete-animation {
+            animation: deletePost 0.5s ease forwards;
+        }
+
+        @keyframes deletePost {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .edit-mode {
+            border: 2px solid #667eea;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .edit-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .edit-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .save-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #5568d3;
+        }
+
+        .cancel-btn {
+            background: #e4e6eb;
+            color: #65676b;
+        }
+
+        .cancel-btn:hover {
+            background: #d8dadf;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar,
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-icons {
+                gap: 8px;
+            }
+
+            .story {
+                min-width: 90px;
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0 12px;
+            }
+
+            .main-container {
+                padding: 0 8px;
+                margin: 16px auto;
+            }
+
+            .post-action-btn span {
+                display: none;
+            }
+
+            .stories-section {
+                padding: 12px;
+            }
+
+            .share-popup {
+                min-width: 90%;
+                max-width: 90%;
+            }
+
+            .share-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-    
-</body>
-</html>
+    <!-- Animated Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">SocialHub</div>
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search SocialHub">
+            </div>
+            <div class="nav-icons">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-icon">👥</div>
+                <div class="nav-icon">
+                    💬
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="nav-icon">
+                    🔔
+                    <span class="notification-badge">5</span>
+                </div>
+                <div class="menu-toggle">☰</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar">ME</div>
+                <div class="profile-name">My Profile</div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-number">245</div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">1.2K</div>
+                        <div class="stat-label">Friends</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3.5K</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">👤</div>
+                    <span>My Profile</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">👥</div>
+                    <span>Friends</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">💬</div>
+                    <span>Messages</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">📸</div>
+                    <span>Photos</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">📹</div>
+                    <span>Videos</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">🎮</div>
+                    <span>Games</span>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon">⚙️</div>
+                    <span>Settings</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="main-feed">
+            <!-- Stories Section -->
+            <div class="stories-section">
+                <div class="stories-container">
+                    <div class="story add-story" onclick="document.getElementById('storyInput').click()">
+                        <div class="add-story-icon">+</div>
+                        <div class="story-name">Create Story</div>
+                    </div>
+                    <input type="file" id="storyInput" accept="image/*" style="display: none;" onchange="uploadStory(this)">
+                    <div class="story" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <div class="story-avatar" style="color: #fa709a;">EM</div>
+                        <div class="story-name">Emma</div>
+                    </div>
+                    <div class="story" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <div class="story-avatar" style="color: #30cfd0;">DL</div>
+                        <div class="story-name">David</div>
+                    </div>
+                    <div class="story" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                        <div class="story-avatar" style="color: #a8edea;">LB</div>
+                        <div class="story-name">Lisa</div>
+                    </div>
+                    <div class="story" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);">
+                        <div class="story-avatar" style="color: #ff9a9e;">RW</div>
+                        <div class="story-name">Robert</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Post -->
+            <div class="create-post">
+                <div class="create-post-input">
+                    <div class="user-avatar">ME</div>
+                    <input type="text" class="post-input" id="postInput" placeholder="What's on your mind?">
+                </div>
+                <div class="image-preview-container">
+                    <img id="postImagePreview" class="post-image-preview" alt="Preview">
+                    <button class="remove-image-btn" onclick="removePostImage()">×</button>
+                </div>
+                <div class="post-actions">
+                    <button class="post-action-btn">
+                        <span>📷</span> <span>Photo</span>
+                        <input type="file" accept="image/*" onchange="previewPostImage(this)">
+                    </button>
+                    <button class="post-action-btn">
+                        <span>📹</span> <span>Video</span>
+                        <input type="file" accept="video/*">
+                    </button>
+                    <button class="post-action-btn" onclick="toggleEmojiPicker(event)">
+                        <span>😊</span> <span>Feeling</span>
+                    </button>
+                    <button class="post-action-btn" onclick="createPost()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <span>Post</span>
+                    </button>
+                </div>
+                <div class="emoji-picker" id="emojiPicker">
+                    <span class="emoji-item" onclick="addEmoji('😊')">😊</span>
+                    <span class="emoji-item" onclick="addEmoji('😂')">😂</span>
+                    <span class="emoji-item" onclick="addEmoji('❤️')">❤️</span>
+                    <span class="emoji-item" onclick="addEmoji('🎉')">🎉</span>
+                    <span class="emoji-item" onclick="addEmoji('🚀')">🚀</span>
+                    <span class="emoji-item" onclick="addEmoji('🔥')">🔥</span>
+                    <span class="emoji-item" onclick="addEmoji('👍')">👍</span>
+                    <span class="emoji-item" onclick="addEmoji('💯')">💯</span>
+                    <span class="emoji-item" onclick="addEmoji('🌟')">🌟</span>
+                    <span class="emoji-item" onclick="addEmoji('✨')">✨</span>
+                    <span class="emoji-item" onclick="addEmoji('🎈')">🎈</span>
+                    <span class="emoji-item" onclick="addEmoji('🌈')">🌈</span>
+                    <span class="emoji-item" onclick="addEmoji('⭐')">⭐</span>
+                    <span class="emoji-item" onclick="addEmoji('💪')">💪</span>
+                    <span class="emoji-item" onclick="addEmoji('👏')">👏</span>
+                    <span class="emoji-item" onclick="addEmoji('🙌')">🙌</span>
+                </div>
+            </div>
+
+            <!-- Posts Container -->
+            <div id="postsContainer">
+                <!-- Sample Post 1 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="user-avatar">JD</div>
+                        <div class="post-user-info">
+                            <div class="post-username">John Doe</div>
+                            <div class="post-time">2 hours ago</div>
+                        </div>
+                        <div class="post-menu" onclick="togglePostMenu(event, this)">
+                            ⋯
+                            <div class="post-dropdown">
+                                <div class="dropdown-item" onclick="editPost(this)">✏️ Edit Post</div>
+                                <div class="dropdown-item" onclick="savePost(this)">💾 Save Post</div>
+                                <div class="dropdown-item" onclick="hidePost(this)">🚫 Hide Post</div>
+                                <div class="dropdown-item" onclick="deletePost(this)" style="color: #ff4458;">🗑️ Delete Post</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        Just launched my new project! 🚀 So excited to share this with everyone. Working on this for the past 6 months and finally ready to show the world. What do you think?
+                    </div>
+                    <div class="post-stats">
+                        <span>❤️ 124 Likes</span>
+                        <span>45 Comments · 12 Shares</span>
+                    </div>
+                    <div class="post-interactions">
+                        <button class="interaction-btn" onclick="showReactions(event, this)" onmouseover="showReactions(event, this)">
+                            👍 Like
+                            <div class="reaction-popup">
+                                <span class="reaction-emoji" data-label="Like" onclick="addReaction(this, '👍')">👍</span>
+                                <span class="reaction-emoji" data-label="Love" onclick="addReaction(this, '❤️')">❤️</span>
+                                <span class="reaction-emoji" data-label="Haha" onclick="addReaction(this, '😂')">😂</span>
+                                <span class="reaction-emoji" data-label="Wow" onclick="addReaction(this, '😮')">😮</span>
+                                <span class="reaction-emoji" data-label="Sad" onclick="addReaction(this, '😢')">😢</span>
+                                <span class="reaction-emoji" data-label="Angry" onclick="addReaction(this, '😡')">😡</span>
+                            </div>
+                        </button>
+                        <button class="interaction-btn" onclick="toggleComments(this)">💬 Comment</button>
+                        <button class="interaction-btn" onclick="showSharePopup()">📤 Share</button>
+                    </div>
+                    <div class="comments-section">
+                        <div class="typing-indicator">
+                            <span class="typing-dots">
+                                <span>.</span><span>.</span><span>.</span>
+                            </span>
+                            Someone is typing
+                        </div>
+                        <div class="comment">
+                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">SA</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Sarah Anderson</div>
+                                <div class="comment-text">This looks amazing! Congratulations! 🎉</div>
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">MJ</div>
+                            <div class="comment-content">
+                                <div class="comment-author">Mike Johnson</div>
+                                <div class="comment-text">Can't wait to try it out!</div>
+                            </div>
+                        </div>
+                        <div class="comment-input-wrapper">
+                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">ME</div>
+                            <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="if(event.key==='Enter') addComment(this)" oninput="showTypingIndicator(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Post 2 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">SA</div>
+                        <div class="post-user-info">
+                            <div class="post-username">Sarah Anderson</div>
+                            <div class="post-time">5 hours ago</div>
+                        </div>
+                        <div class="post-menu" onclick="togglePostMenu(event, this)">
+                            ⋯
+                            <div class="post-dropdown">
+                                <div class="dropdown-item" onclick="editPost(this)">✏️ Edit Post</div>
+                                <div class="dropdown-item" onclick="savePost(this)">💾 Save Post</div>
+                                <div class="dropdown-item" onclick="hidePost(this)">🚫 Hide Post</div>
+                                <div class="dropdown-item" onclick="deletePost(this)" style="color: #ff4458;">🗑️ Delete Post</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        Beautiful sunset today! 🌅 Nature never fails to amaze me. Sometimes you just need to stop and appreciate the simple things in life.
+                    </div>
+                    <div class="post-stats">
+                        <span>❤️ 289 Likes</span>
+                        <span>67 Comments · 23 Shares</span>
+                    </div>
+                    <div class="post-interactions">
+                        <button class="interaction-btn" onclick="showReactions(event, this)" onmouseover="showReactions(event, this)">
+                            👍 Like
+                            <div class="reaction-popup">
+                                <span class="reaction-emoji" data-label="Like" onclick="addReaction(this, '👍')">👍</span>
+                                <span class="reaction-emoji" data-label="Love" onclick="addReaction(this, '❤️')">❤️</span>
+                                <span class="reaction-emoji" data-label="Haha" onclick="addReaction(this, '😂')">😂</span>
+                                <span class="reaction-emoji" data-label="Wow" onclick="addReaction(this, '😮')">😮</span>
+                                <span class="reaction-emoji" data-label="Sad" onclick="addReaction(this, '😢')">😢</span>
+                                <span class="reaction-emoji" data-label="Angry" onclick="addReaction(this, '😡')">😡</span>
+                            </div>
+                        </button>
+                        <button class="interaction-btn" onclick="toggleComments(this)">💬 Comment</button>
+                        <button class="interaction-btn" onclick="showSharePopup()">📤 Share</button>
+                    </div>
+                    <div class="comments-section">
+                        <div class="typing-indicator">
+                            <span class="typing-dots">
+                                <span>.</span><span>.</span><span>.</span>
+                            </span>
+                            Someone is typing
+                        </div>
+                        <div class="comment-input-wrapper">
+                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">ME</div>
+                            <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="if(event.key==='Enter') addComment(this)" oninput="showTypingIndicator(this)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sample Post 3 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="user-avatar" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">MJ</div>
+                        <div class="post-user-info">
+                            <div class="post-username">Mike Johnson</div>
+                            <div class="post-time">1 day ago</div>
+                        </div>
+                        <div class="post-menu" onclick="togglePostMenu(event, this)">
+                            ⋯
+                            <div class="post-dropdown">
+                                <div class="dropdown-item" onclick="editPost(this)">✏️ Edit Post</div>
+                                <div class="dropdown-item" onclick="savePost(this)">💾 Save Post</div>
+                                <div class="dropdown-item" onclick="hidePost(this)">🚫 Hide Post</div>
+                                <div class="dropdown-item" onclick="deletePost(this)" style="color: #ff4458;">🗑️ Delete Post</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        Finally finished reading this amazing book! 📚 "Atomic Habits" by James Clear. Highly recommend it to anyone interested in tech, innovation, and personal growth. The insights are game-changing!
+                    </div>
+                    <div class="post-stats">
+                        <span>❤️ 156 Likes</span>
+                        <span>38 Comments · 15 Shares</span>
+                    </div>
+                    <div class="post-interactions">
+                        <button class="interaction-btn" onclick="toggleLike(this)">👍 Like</button>
+                        <button class="interaction-btn" onclick="toggleComments(this)">💬 Comment</button>
+                        <button class="interaction-btn" onclick="showSharePopup()">📤 Share</button>
+                    </div>
+                    <div class="comments-section">
+                        <div class="comment-input-wrapper">
+                            <div class="user-avatar" style="width: 32px; height: 32px; font-size: 12px;">ME</div>
+                            <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="if(event.key==='Enter') addComment(this)">
+                
